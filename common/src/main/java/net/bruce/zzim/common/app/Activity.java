@@ -1,8 +1,15 @@
 package net.bruce.zzim.common.app;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+
+import java.util.List;
+
+import butterknife.ButterKnife;
+
 
 /**
  * Created by yang.jianan on 2017/07/20 17:19.
@@ -16,7 +23,7 @@ public abstract class Activity extends AppCompatActivity {
         initWindows();
 
         if (initArgs(getIntent().getExtras())) {
-            getContentLayoutId();
+            setContentView(getContentLayoutId());
             initWidget();
             initData();
         } else {
@@ -53,7 +60,7 @@ public abstract class Activity extends AppCompatActivity {
      * 初始化控件
      */
     protected void initWidget() {
-
+        ButterKnife.bind(this);
     }
 
     /**
@@ -65,6 +72,7 @@ public abstract class Activity extends AppCompatActivity {
 
     /**
      * 点击导航返回上一页
+     *
      * @return
      */
     @Override
@@ -75,7 +83,22 @@ public abstract class Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        // 得到当期那Activity下的所有Fragment
+        @SuppressLint("RestrictedApi")
+        List<android.support.v4.app.Fragment> fragments = getSupportFragmentManager().getFragments();
+        // 判断是否为空
+        if (fragments != null && fragments.size() > 0) {
+            for (Fragment fragment : fragments) {
+                // 判断是否为我们能够处理的Fragment类型
+                if (fragment instanceof net.bruce.zzim.common.app.Fragment) {
+                    // 判断是否拦截了返回按钮
+                    if (((net.bruce.zzim.common.app.Fragment) fragment).onBackPressed()) {
+                        //如果有直接return
+                        return;
+                    }
+                }
+            }
+        }
 
         super.onBackPressed();
         finish();

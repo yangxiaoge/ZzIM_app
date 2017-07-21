@@ -7,12 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by yang.jianan on 2017/07/20 17:19.
  */
 
 public abstract class Fragment extends android.support.v4.app.Fragment {
     protected View root;
+    protected Unbinder mRootUnbinder;
 
     @Override
     public void onAttach(Context context) {
@@ -65,7 +69,7 @@ public abstract class Fragment extends android.support.v4.app.Fragment {
      * 初始化控件
      */
     protected void initWidget(View viewRoot) {
-
+        mRootUnbinder = ButterKnife.bind(this, viewRoot);
     }
 
     /**
@@ -73,5 +77,15 @@ public abstract class Fragment extends android.support.v4.app.Fragment {
      */
     protected void initData() {
 
+    }
+
+    /**
+     * 返回键触发时调用
+     *
+     * @return 返回True代表我已处理返回逻辑，Activity不用自己finish
+     * 返回False代表我没有处理逻辑，Activitu自己走自己的逻辑
+     */
+    public boolean onBackPressed() {
+        return false;
     }
 }
