@@ -40,6 +40,7 @@ dependencies {
     //butterknife
     compile "com.jakewharton:butterknife:$rootProject.ext.butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterknifeVersion"
+    compile 'com.liulishuo.filedownloader:library:1.6.2'
 
     compile project(':common')
 }
